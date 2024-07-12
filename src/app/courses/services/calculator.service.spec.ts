@@ -7,6 +7,8 @@ import {TestBed} from "@angular/core/testing";
 /*
 Test Example
 
+* disabling tests: xdescribe, xit (exclude)
+* only run 1 test: fdescribe, fit (focus)
  */
 describe('CalculatorService', () => {
 
@@ -19,6 +21,8 @@ describe('CalculatorService', () => {
     // loggerSpy.log.and.returnValue();
 
     /*
+    TestBed sets up angular module with injected dependencies
+
     TestBed Utility allows us to inject our services through dependency injection instead of using constructors explicitly
 
     * takes 1 configuration object that contains properties very similar to the angular module such as declaration, imports, providers
