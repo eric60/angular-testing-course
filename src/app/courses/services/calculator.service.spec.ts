@@ -16,7 +16,7 @@ describe('CalculatorService', () => {
   beforeEach(() => {
     console.log("Calling beforeEach")
     loggerSpy = jasmine.createSpyObj("LoggerService", ["log"])
-    loggerSpy.log.and.returnValue();
+    // loggerSpy.log.and.returnValue();
 
     /*
     TestBed Utility allows us to inject our services through dependency injection instead of using constructors explicitly
@@ -37,9 +37,10 @@ describe('CalculatorService', () => {
         {provide: LoggerService, useValue: loggerSpy} // don't want to use the ACTUAL instance, want to use jasmine spy, first specify what providing by using a unique dependency injection key/token which is the class itself since the constructor is unique to the js runtime. useValue uses loggerSpy wherever need to use LoggerService
       ]
     })
-    TestBed.inject(CalculatorService);
+    calculator = TestBed.inject(CalculatorService);
   })
 
+  // functional specification that tests 1 functionality of the service and 1 ONLY like the method
   it('should add two numbers', () => {
     console.log("add test")
 
