@@ -29,11 +29,32 @@ describe("CoursesService", () => {
         expect(course.titles.description).toBe("Angular Testing Course")
       })
 
+    // not synchronous test: mock request is made AFTER the subscription to the result of findAllCourses
     const req = httpTestingController.expectOne("/api/courses")
     expect(req.request.method).toEqual("GET");
 
     // only when flush call is made, will the mock http request simulate a response which will pass to the subscribe block of findAllCourses
     // Resolve the request by returning a body plus additional HTTP information (such as response headers) if provided.
     req.flush({payload: Object.values(COURSES)})
+
   })
+
+  it("should find a course by id", () => {
+
+    coursesService.findCourseById(12)
+    .subscribe(course => {
+      expect(course).toBeTruthy();
+      expect(course.id).toBe(12);
+    })
+
+    const req = httpTestingController.expectOne("/api/courses/12");
+    expect(req.request.method).toEqual("GET")
+    req.flush(COURSES[12])
+
+  })
+
+  afterEach(() => {
+    httpTestingController.verify()
+  })
+
 })
