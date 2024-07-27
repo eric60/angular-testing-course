@@ -34,7 +34,8 @@ describe("CoursesService", () => {
     const req = httpTestingController.expectOne("/api/courses")
     expect(req.request.method).toEqual("GET");
 
-    // only when flush call is made, will the mock http request simulate a response which will pass to the subscribe block of findAllCourses
+    // req.flush triggers the http request
+    // only when flush call is made, will the mock http request simulate a response which will pass to the executing code of findAllCourses() (subscribe block)
     // Resolve the request by returning a body plus additional HTTP information (such as response headers) if provided.
     req.flush({payload: Object.values(COURSES)})
 
@@ -83,6 +84,16 @@ describe("CoursesService", () => {
     const req = httpTestingController.expectOne("/api/courses/12")
     expect(req.request.method).toEqual("PUT");
     req.flush("Save course failed", {status: 500, statusText:"Internal Server Error"});
+  })
+
+  it("should find a list of lessons", () => {
+    coursesService.findLessons(12)
+      .subscribe(lessons => {
+        expect(lessons).toBeTruthy()
+        expect(lessons.length).toBe(3);
+      })
+
+
   })
 
   afterEach(() => {
