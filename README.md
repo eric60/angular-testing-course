@@ -1,7 +1,9 @@
 Summary
+* All Commands
 * npm start
 * npm run server
 * npm test
+* nvm use v18
 
 ## Angular Testing Course
 
