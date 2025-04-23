@@ -6,6 +6,7 @@ import {Course} from "../model/course";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {HttpErrorResponse} from "@angular/common/http";
 
+// **tc2
 describe("CoursesService", () => {
   let coursesService: CoursesService;
   let httpTestingController: HttpTestingController
@@ -30,7 +31,8 @@ describe("CoursesService", () => {
         expect(course.titles.description).toBe("Angular Testing Course")
       })
 
-    // not synchronous test: mock request is made AFTER the subscription to the result of findAllCourses
+    // not synchronous test:
+    // mock request is made AFTER the subscription to the result of findAllCourses
     const req = httpTestingController.expectOne("/api/courses")
     expect(req.request.method).toEqual("GET");
 
