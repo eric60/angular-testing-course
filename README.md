@@ -1,5 +1,6 @@
-Summary
-* All Commands
+Summary 
+All Commands
+* npm install
 * npm start
 * npm run server
 * npm test
