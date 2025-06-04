@@ -2,7 +2,7 @@ import {fakeAsync, flush, flushMicrotasks, tick} from '@angular/core/testing';
 import {of} from 'rxjs';
 import {delay} from 'rxjs/operators';
 
-// uat#28-37
+// Udemy Lesson #28-37
 describe('Async Testing Examples', () => {
 
     it('Asynchronous test example with Jasmine done()', (done: DoneFn) => {
@@ -36,7 +36,8 @@ describe('Async Testing Examples', () => {
 
     }));
 
-    fit('Asynchronous test example - plain promise', (() => {
+    // wrapped in fakeasync(...) zone
+    it('Asynchronous test example - plain promise', fakeAsync(() => {
       let test = false;
       console.log('Creating promise')
 
@@ -46,8 +47,8 @@ describe('Async Testing Examples', () => {
 
       setTimeout(() => {
         console.log('setTimeout() 2 callback triggered')
-
-        Creating promise
+Logs
+context.js:265 Creating promise
 context.js:265 Running test assertions
 context.js:265 Promise 1st then() evaluated successfully
 context.js:265 Promise 2nd then() evaluated successfully
@@ -62,98 +63,58 @@ context.js:265 setTimeout() 2 callback triggered
         console.log('Promise 2nd then() evaluated successfully')
           test = true;
       });
+
       // Note: Promise higher priority than setTimeout, 2 separate async tasks in 2 separate queues, browser does microtask queue first
       // promise is microtask queue in separate queue, browser will not update view in between, lightweight, makes browser more responsive
       // setTimeout is a macro task queue (setInterval, ajax calls, mouseClicks) added to event loop between each macrotask, browser rendering engine can re-render screen
+
+      flushMicrotasks();
       console.log('Running test assertions')
-      expect(test).toBeTruthy()
-    }))
-
-    it('Asynchronous test example - plain Promise', fakeAsync(() => {
-
-        let test = false;
-
-        console.log('Creating promise');
-
-        Promise.resolve().then(() => {
-
-            console.log('Promise first then() evaluated successfully');
-
-            return Promise.resolve();
-        })
-        .then(() => {
-
-            console.log('Promise second then() evaluated successfully');
-
-            test = true;
-
-        });
-
-        flushMicrotasks();
-
-        console.log('Running test assertions');
-
-        expect(test).toBeTruthy();
-
+      expect(test).toBeTruthy() // execute assertions after the promise change microtasks are flushed
     }));
 
 
     it('Asynchronous test example - Promises + setTimeout()', fakeAsync(() => {
-
         let counter = 0;
-
         Promise.resolve()
             .then(() => {
-
                counter+=10;
-
+               // macro task gives opportunity for angular to update DOM, between the 2 setTimeout macrotasks angular will update the DOM
                setTimeout(() => {
-
                    counter += 1;
-
                }, 1000);
-
             });
-
         expect(counter).toBe(0);
 
         flushMicrotasks();
-
         expect(counter).toBe(10);
 
         tick(500);
-
         expect(counter).toBe(10);
-
-        tick(500);
-
+        tick(500); //waited for a whole second
         expect(counter).toBe(11);
-
     }));
 
+    // fakeasync zone
     it('Asynchronous test example - Observables', fakeAsync(() => {
-
         let test = false;
-
         console.log('Creating Observable');
 
-        const test$ = of(test).pipe(delay(1000));
+        // synchronous observables emit test then immediately complete for observers to use
+        const test1$ = of(test);
 
-        test$.subscribe(() => {
+        // asynchronous observable using setTimeout, promises, etc emit test then wait 1 second before completing for observers to get the test value
+        const test2$ = of(test).pipe(delay(1000));
 
+        test2$.subscribe(() => {
             test = true;
-
+            // for synchronous observable, the callback immediately executes before the assertions get a chance to run
         });
 
-        tick(1000);
-
+        tick(1000); // move time forward 1 second
         console.log('Running test assertions');
-
         expect(test).toBe(true);
-
-
     }));
-
 
 });
 
