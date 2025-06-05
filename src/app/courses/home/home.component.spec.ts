@@ -15,7 +15,13 @@ import {click} from '../common/test-utils';
 
 
 
+/*
+async() vs waitForAsync() zone vs fakeAsync() zone
+* async() zone - replaced by waitForAsync() zone to avoid confusion with async await syntax
+* waitForAsync() zone
+* fakeAsync() zone
 
+ */
 describe('HomeComponent', () => {
 
   let fixture: ComponentFixture<HomeComponent>;
@@ -99,28 +105,23 @@ describe('HomeComponent', () => {
   });
 
 
-  it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => {
-
+  it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => { // use fakeAsync zone with fakeAsync APIs to move time forward or flush multiple event queues to replace confusing setTimeOut( ... done(), 500))
       coursesService.findAllCourses.and.returnValue(of(setupCourses()));
-
-      fixture.detectChanges();
+      fixture.detectChanges(); // update DOM with the list of courses
 
       const tabs = el.queryAll(By.css(".mdc-tab"));
-
-      click(tabs[1]);
-
+      click(tabs[1]); // some timer trigerred here for request animation frame
       fixture.detectChanges();
 
-      flush();
+      // flushMicrotasks() this doesn't work since not a microtask like promise, it's a macrotask browser event like setTimeout(), setInterval(),
+      // tick(16) this works since call to request animation frame runs every 16 seconds.
+      flush(); // flush all async microtasks and macrotasks like the async "request animation frame" in clicking the advanced tab
 
       const cardTitles = el.queryAll(By.css('.mat-mdc-tab-body-active .mat-mdc-card-title'));
-
       console.log(cardTitles);
 
       expect(cardTitles.length).toBeGreaterThan(0,"Could not find card titles");
-
       expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
-
   }));
 
 
