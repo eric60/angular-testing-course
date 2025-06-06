@@ -15,15 +15,7 @@ import {click} from '../common/test-utils';
 
 
 
-/*
-async() vs waitForAsync() zone vs fakeAsync() zone
-* async() zone - replaced by waitForAsync() zone to avoid confusion with async await syntax
-* waitForAsync() zone
-* fakeAsync() zone
-
- */
 describe('HomeComponent', () => {
-
   let fixture: ComponentFixture<HomeComponent>;
   let component:HomeComponent;
   let el: DebugElement;
@@ -35,10 +27,7 @@ describe('HomeComponent', () => {
     const advancedCourses = setupCourses()
         .filter(course => course.category == 'ADVANCED');
 
-
-
   beforeEach(waitForAsync(() => {
-
       const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses'])
 
       TestBed.configureTestingModule({
@@ -49,7 +38,7 @@ describe('HomeComponent', () => {
           providers: [
               {provide: CoursesService, useValue: coursesServiceSpy}
           ]
-      }).compileComponents()
+      }).compileComponents() // most components fetched synchronously but some legacy components may compile by fetching html/css through backend asynchronously so need a promise then for completion
           .then(() => {
               fixture = TestBed.createComponent(HomeComponent);
               component = fixture.componentInstance;
@@ -57,25 +46,19 @@ describe('HomeComponent', () => {
               coursesService = TestBed.inject(CoursesService);
           });
 
+      // flushMicrotasks() can use this if using fakeAsync if sure all components fetched sychronously without backend calls
   }));
 
   it("should create the component", () => {
-
     expect(component).toBeTruthy();
-
   });
 
 
   it("should display only beginner courses", () => {
-
       coursesService.findAllCourses.and.returnValue(of(beginnerCourses));
-
       fixture.detectChanges();
-
       const tabs = el.queryAll(By.css(".mdc-tab"));
-
       expect(tabs.length).toBe(1, "Unexpected number of tabs found");
-
   });
 
 
@@ -105,11 +88,12 @@ describe('HomeComponent', () => {
   });
 
 
-  it("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => { // use fakeAsync zone with fakeAsync APIs to move time forward or flush multiple event queues to replace confusing setTimeOut( ... done(), 500))
+  fit("should display advanced courses when tab clicked - fakeAsync", fakeAsync(() => { // use fakeAsync zone with fakeAsync APIs to move time forward or flush multiple event queues to replace confusing setTimeOut( ... done(), 500))
       coursesService.findAllCourses.and.returnValue(of(setupCourses()));
       fixture.detectChanges(); // update DOM with the list of courses
 
       const tabs = el.queryAll(By.css(".mdc-tab"));
+      console.log(`===> tabs: ${tabs}`)
       click(tabs[1]); // some timer trigerred here for request animation frame
       fixture.detectChanges();
 
@@ -125,30 +109,29 @@ describe('HomeComponent', () => {
   }));
 
 
+  /*
+async() vs waitForAsync() zone vs fakeAsync() zone
+* async() zone - replaced by waitForAsync() zone to avoid confusion with async await syntax
+* waitForAsync() zone - can't do flush() to empty task queues or tick() to control time, so in order to pass async test need to use fixture.detectChanges() after every async operation like window.requestAnimationFrame() method, biggest pro is supports actual http calls to the backend - this is relevant in beforeEach TestBed which has legacy modules fetching html/css from backend using http calls instead of having files bundled locally | in general never used except in beforeEach block
+* fakeAsync() zone better since have more testing capabilities to test fine-grained control of passage of time, to test intermediate states of our component at specific points in time running task by task  while the whenStable() callback executed after ALL the async oepations complete | allows you to run your assertions in a synchronous clean way
+
+* both are test utilities to test async functionality, only use if necessary and not systematically, most components able to be tested synchronously
+ */
     it("should display advanced courses when tab clicked - async", waitForAsync(() => {
-
         coursesService.findAllCourses.and.returnValue(of(setupCourses()));
-
         fixture.detectChanges();
 
         const tabs = el.queryAll(By.css(".mdc-tab"));
-
-        click(tabs[1]);
-
+        click(tabs[1]); // click runs async operation requestAnimationFrame()
         fixture.detectChanges();
 
+        // whenStable returns promise to run any code you want to run after all the async operations completed
         fixture.whenStable().then(() => {
-
             console.log("called whenStable() ");
-
             const cardTitles = el.queryAll(By.css('.mat-mdc-tab-body-active .mat-mdc-card-title'));
-
             expect(cardTitles.length).toBeGreaterThan(0,"Could not find card titles");
-
             expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
-
         });
-
     }));
 
 
