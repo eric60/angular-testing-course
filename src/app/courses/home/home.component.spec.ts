@@ -14,7 +14,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {click} from '../common/test-utils';
 
 
-
+// if unit test fails, we know IMMEDIATELY that issue is with the component and not the mocked CoursesService
 describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let component:HomeComponent;
@@ -106,6 +106,26 @@ describe('HomeComponent', () => {
 
       expect(cardTitles.length).toBeGreaterThan(0,"Could not find card titles");
       expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
+
+      /*
+      docs on nativeElement.textContent from lib.dom.ts
+
+Differences from innerText
+Don't get confused by the differences between Node.textContent and HTMLElement.innerText. Although the names seem similar, there are important differences:
+
+textContent gets the content of all elements, including <script> and <style> elements.
+In contrast, innerText only shows "human-readable" elements.
+textContent returns every element in the node.
+In contrast, innerText is aware of styling and won't return the text of "hidden" elements.
+
+Moreover, since innerText takes CSS styles into account, reading the value of innerText triggers a reflow to ensure up-to-date computed styles.
+(Reflows can be computationally expensive, and thus should be avoided when possible.)
+
+Differences from innerHTML
+Element.innerHTML returns HTML, as its name indicates.
+Sometimes people use innerHTML to retrieve or write text inside an element, but textContent has better performance because its value is not parsed as HTML.
+Moreover, using textContent can prevent XSS attacks.
+       */
   }));
 
 
