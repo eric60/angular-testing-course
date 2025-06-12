@@ -56,6 +56,9 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 The application is visible at port 4200: [http://localhost:4200](http://localhost:4200)
 
+# To run cypress ETE tests (vs Integration Tests)
+
+    npm run cypress:open
 
 
 # Important 
