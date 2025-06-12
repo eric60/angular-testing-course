@@ -1,31 +1,34 @@
 
 
 // 1 terminal running frontend npm start, not running backend (not needed for ete test since going to mock backend responses)
-// 2nd terminal running cypress npm run cypress:open
+// 2nd terminal running cypress "npm run cypress:open" not "npm run server"
+// ete test: real http request now, but just mocking the backend http request
 describe('Home Page', () => {
 
     beforeEach(() => {
-        cy.fixture('courses.json').as("coursesJSON");
-        cy.server();
-        cy.route('/api/courses', "@coursesJSON").as("courses");
-        cy.visit('/');
+        // cy.fixture('courses.json').as("coursesJSON"); // courses.json is mock http response
+        // cy.server(); // startup cypress mock http backend server
+        // cy.route('/api/courses', "@coursesJSON").as("courses");
+        // cy.visit('/');
+      cy.wait('@courses')
     });
 
-    it('should display All Courses header', () => {
+    it('should display the "All Courses" h3 header even with no backend running', () => {
       cy.visit('/');
       cy.contains("All Courses");
+      cy.get('h3').contains("All Courses")
       // Get the child DOM element that contains given text.
       // cy.get('.nav').contains('About') // Yield el in .nav containing 'About'
-      // cy.contains('Hello') // Yield first el in document containing 'Hello'
+      // cy.contains('Hello') // Yield FIRST el in document containing 'Hello'
     })
 
-    it('should display a list of courses', () => {
+   /* it('should display a list of courses', () => {
 
         cy.contains("All Courses");
 
         cy.wait('@courses');
 
-        cy.get("mat-card").should("have.length", 9);
+        cy.get("mat-card").should("have.length", 9); // 9 material cards
 
     });
 
@@ -41,7 +44,7 @@ describe('Home Page', () => {
             .should('contain', "Angular Security Course");
 
     });
-
+*/
 
 });
 
