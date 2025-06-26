@@ -28,6 +28,8 @@ describe('Home Page', () => {
         cy.get("mat-card").should("have.length", 9); // 9 material cards
     });
 
+
+    // Simulating user interaction clicks in Cypress End to End Tests
     it.only('should display the advanced courses', () => {
         // cy.get('.mat-tab-label').should("have.length", 2);
         // cy.get('.mat-tab-label').last().click();

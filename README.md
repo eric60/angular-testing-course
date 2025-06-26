@@ -52,7 +52,7 @@ This is a small Node REST API server.
 
 To run the frontend part of our code, we will use the Angular CLI:
 
-    npm start 
+    npm run start 
 
 The application is visible at port 4200: [http://localhost:4200](http://localhost:4200)
 
@@ -60,6 +60,15 @@ The application is visible at port 4200: [http://localhost:4200](http://localhos
 
     npm run cypress:open
 
+# To run tests with code coverage
+
+    ng test --watch=false --code-coverage
+    npm install -g http-server
+    httpserver -c-1 ./coverage (disable caching headers)
+
+# To run in production mode
+1) In development mode is: npm start which runs ng serve under the hood in package.json which runs the angular server in developemnt mode
+2) npm run build:prod
 
 # Important 
 
