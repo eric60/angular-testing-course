@@ -64,11 +64,15 @@ The application is visible at port 4200: [http://localhost:4200](http://localhos
 
     ng test --watch=false --code-coverage
     npm install -g http-server
-    httpserver -c-1 ./coverage (disable caching headers)
+    http-server -c-1 ./coverage (disable caching headers)
 
-# To run in production mode
-1) In development mode is: npm start which runs ng serve under the hood in package.json which runs the angular server in developemnt mode
-2) npm run build:prod
+# To run ete tests in prod
+In development mode is: npm start which just runs ng serve under the hood in package.json which runs the angular server in dev mode. 
+To run in prod, want to run server from ./dist folder with bundled code. Run server on -p 4200 so cypress can hit those ete tests, don't need to run node backend server since cypress running mock backend http server.
+1) build server, 2) run server, 3) run cypress hit server
+
+    npm run build:prod
+    npm run start:prod
 
 # Important 
 
