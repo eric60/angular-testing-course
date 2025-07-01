@@ -13,6 +13,19 @@ import {of} from 'rxjs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {click} from '../common/test-utils';
 
+/*
+Angular testing class conclusion notes
+* import complete modules
+* try to avoid writing async test with fakeasync (preferred since can write test in linear way like sync test and simulate passage of time with fine-grained tick() and micro vs macro tasks to test setTimeOut(), setTimeInterval()) and async testing zones, most tests can be written in completely sync way
+* caveat: fakeasync and zones assume that component reaches a state eventually where there is no ore tasks in the queue
+* but with setInterval() there will always be an async task to be queued, so you HAVE to use jasmine done() callback
+* cypress tests ANYTHING that runs in the browser
+* unit test only testing small unit in isolation by mocking out all dependencies that never break
+* Ete test testing whole frontend JUST like its deployed to production: testing all of our actual components, directives and services like they run in production without any js mocking, only http backend responses are mocked
+* deploy to CI server like travisCI: it's all about creating 1 unique command with npm script to start the dev server WITH the production bundle, wait for server to be up and running, and then and only then run cypress ete test with cypress run command, when cypress run exists, dev server also exits, with that command easy to deploy ete tests into to any continuous integeration server
+* generate code coverage reports with angular CI
+
+ */
 
 // if unit test fails, we know IMMEDIATELY that issue is with the component and not the mocked CoursesService
 describe('HomeComponent', () => {
