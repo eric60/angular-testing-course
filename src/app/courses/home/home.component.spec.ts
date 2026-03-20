@@ -106,7 +106,7 @@ describe('HomeComponent', () => {
       fixture.detectChanges(); // update DOM with the list of courses
 
       const tabs = el.queryAll(By.css(".mdc-tab"));
-      console.log(`===> tabs: ${tabs}`)
+      console.log(`=> tabs: ${tabs}`)
       click(tabs[1]); // some timer trigerred here for request animation frame
       fixture.detectChanges();
 

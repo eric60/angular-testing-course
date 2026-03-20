@@ -1,3 +1,31 @@
+## Cypress notes
+These are results for is cypress used for integration or end to end testing
+Search instead for is cypress used for integration or endtoend teting
+
+AI Overview
+Cypress is used for both end-to-end (E2E) testing and integration testing, as well as other testing types like component testing. It was originally designed as a powerful E2E testing framework but has since expanded its capabilities. 
+
+Primarily Known For: End-to-End Testing 
+Cypress is widely known as a next-generation E2E testing tool built for the modern 
+
+User simulation: E2E tests in Cypress simulate real user interactions and flows within the application's UI, such as clicking buttons and typing text.
+
+Real browser environment: Cypress runs directly within a real browser, giving it native access to the DOM and network layer, which helps in delivering consistent and reliable tests.
+
+Comprehensive flow testing: It is ideal for validating entire application flows, ensuring all components of a system work together as expected in a real-world scenario. 
+
+
+Also Capable Of: Integration Testing 
+While E2E is its primary focus, Cypress can also be effectively used for integration testing. 
+
+Component collaboration: Integration tests verify that different parts or modules of an application work correctly when combined, which is more complex than isolated unit tests.
+
+Network control: Cypress provides features to control network traffic (stubbing and spying on API requests) which is crucial for isolating tests from backend dependencies during integration testing.
+
+Programmatic access: Because Cypress runs in the same run loop as your application, you have **programmatic access to objects, functions, and the application's state**, making integration testing more straightforward. 
+
+In summary, Cypress is a flexible tool that provides solutions for a variety of testing needs, with strong features supporting both E2E and integration testing. You can find more information on the Cypress Documentation website
+
 
 ## Angular Testing Course
 
