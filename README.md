@@ -10,7 +10,7 @@ Cypress is widely known as a next-generation E2E testing tool built for the mode
 
 User simulation: E2E tests in Cypress simulate real user interactions and flows within the application's UI, such as clicking buttons and typing text.
 
-Real browser environment: Cypress runs directly within a real browser, giving it native access to the DOM and network layer, which helps in delivering consistent and reliable tests.
+Real browser environment: **Cypress runs directly within a real browser, giving it native access to the DOM and network layer, which helps in delivering consistent and reliable tests.**
 
 Comprehensive flow testing: It is ideal for validating entire application flows, ensuring all components of a system work together as expected in a real-world scenario. 
 
@@ -84,6 +84,7 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 The application is visible at port 4200: [http://localhost:4200](http://localhost:4200)
 
+================================================================
 # To run cypress ETE tests (vs Integration Tests)
 
     npm run cypress:open

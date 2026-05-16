@@ -28,6 +28,8 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CoursesService} from './services/courses.service';
 import {courseResolver} from './services/course.resolver';
+import {Routes} from "@angular/router";
+
 
 @NgModule({
     declarations: [
